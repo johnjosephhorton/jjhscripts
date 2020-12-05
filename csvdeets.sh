@@ -3,8 +3,8 @@
 # Takes a CSV file as input and gives some statistics about each column.
 # Depends on datamash
 
-numrows=$(wc -l $1)
-printf "NumRows:$numrows\n"
+numrows=$(cat $1 | wc -l)
+printf "Number of Rows: $numrows\n"
 
 numdistinctrows=$(cat $1 | sort | uniq | wc -l)
 printf "Number of Distinct Rows:$numdistinctrows\n"
@@ -33,6 +33,8 @@ do
     printf "\n"
     printf "Most common values (top 5, if that many):\n"
     awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sort | uniq -c | sort -n -k1 -r  | head -n 5
+    printf "Lead common values (top 5, if that many):\n"
+    awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sort | uniq -c | sort -n -k1 -r  | tail -n 5
     printf "Summary Stats:\n"
     printf "N \t min \t med \t mean \t max \t stdev\n"
     (awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 |
