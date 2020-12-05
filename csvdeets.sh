@@ -9,6 +9,11 @@ printf "Number of Rows: $numrows\n"
 numdistinctrows=$(cat $1 | sort | uniq | wc -l)
 printf "Number of Distinct Rows:$numdistinctrows\n"
 
+headers=$(awk -F "\"*,\"*" -v j=$i 'NR==1{print $j}' $1)
+echo $headers | wc -l
+
+# -v 
+
 numfields=$(awk -F "\"*,\"*" -v j=$i 'NR==1{print NF}' $1)
 
 for i in $(seq 1 $numfields);
@@ -17,10 +22,14 @@ do
     printf "##########################################################\n"
     printf "Column Name:"
     awk -F "\"*,\"*" -v j=$i 'NR==1{print $j}' $1
+    #tmpfile=$(mktemp /tmp/abc-script.XXXXXX)
+    awk -v FPAT='[^,]*|"[^"]+"' -v j=$i  'NR>1{print $j}' $1 > $tmpfile
     printf "Number of unique values:"
-    awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sort | uniq | wc -l
-    numValues=$(awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | wc -l)
-    numNonBlank=$(awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sed '/^\s*$/d' | wc -l)
+    cat $tmpfile | sort | uniq | wc -l
+    #numValues=$(awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | wc -l)
+    numValues=$(cat $tmpfile | wc -l)
+    #numNonBlank=$(awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sed '/^\s*$/d' | wc -l)
+    numNonBlank=$($tmpfile | sed '/^\s*$/d' | wc -l)
     numMissing=$(echo "$numValues - $numNonBlank" | bc -l)
     printf "Num Empty/Missing:" 
     printf $numMissing
@@ -32,7 +41,7 @@ do
     awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sort | tail -n 3 | tr '\n' ' '
     printf "\n"
     printf "Most common values (top 5, if that many):\n"
-    awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sort | uniq -c | sort -n -k1 -r  | head -n 5
+    awk -v FPAT='[^,]*|"[^"]+"' -v j=$i  'NR>1{print $j}' $1 | sort | uniq -c | sort -n -k1 -r  | head -n 5
     printf "Lead common values (top 5, if that many):\n"
     awk -F "\"*,\"*" -v j=$i  'NR>1{print $j}' $1 | sort | uniq -c | sort -n -k1 -r  | tail -n 5
     printf "Summary Stats:\n"
