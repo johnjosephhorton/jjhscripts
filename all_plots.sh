@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # This finds all the graphics in a LaTeX file, including those that are commmented out.
 

@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env bash
 
 # Takes a CSV file as input and gives some statistics about each column.
 # Depends on datamash and csvtool being installed. 
@@ -34,7 +34,7 @@ do
     printf "\n"
     printf "Most common values (top 5, if that many):\n"
     csvtool col $i $1 | tail -n +2 | sort | uniq -c | sort -n -k1 -r  | head -n 5
-    printf "Lead common values (top 5, if that many):\n"
+    printf "Least common values (top 5, if that many):\n"
     csvtool col $i $1 | tail -n +2 | sort | uniq -c | sort -n -k1 -r  | tail -n 5
     printf "Summary Stats:\n"
     printf "N \t min \t med \t mean \t max \t stdev\n"

@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env bash
 
 # Takes any file, gets the current time and moves it to a snapshot folder
 
