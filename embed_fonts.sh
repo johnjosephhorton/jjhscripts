@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # This takes a PDF and embeds fonts using GhostScript 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # This takes a LaTeX file as an input, strips out LaTeX stuff
 # and then uses ispell to find the spelling mistakes. 

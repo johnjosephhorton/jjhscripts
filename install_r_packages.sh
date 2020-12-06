@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Takes list of packages (from stdout) and see if they are installed - if not, installs them one by one.
 
